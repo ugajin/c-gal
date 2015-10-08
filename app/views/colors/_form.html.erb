@@ -1,0 +1,5 @@
+<%= bootstrap_form_for(@color, layout: :horizonatal) do |f| %>
+  <%= f.text_field :name %>
+  <%= f.text_field :color_code %>
+  <%= f.submit "save", name: "publish", class: "btn btn-primary" %>
+<% end%>
