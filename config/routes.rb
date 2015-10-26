@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :dresses
   resources :dress_types
   resources :colors
+  resources :pictures
 
   # You can have the root of your site routed with "root"
   root 'dresses#index'
