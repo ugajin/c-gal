@@ -1,13 +1,18 @@
 $ ->
   canvas = $('#draw-area')
   ctx = canvas[0].getContext('2d')
-  ctx.lineWidth = 1 
+  ctx.lineWidth = 1
 
   canvas.mousedown (e)->
+    img = new Image()
     fill_x = $('.fill-x').val()
     fill_y = $('.fill-y').val()
 
-    ctx.strokeRect(e.clientX, e.clientY, fill_x, fill_y)
+    # ctx.strokeRect(e.clientX, e.clientY, fill_x, fill_y)
+    img.onload = ()->
+      ctx.drawImage(img, e.clientX, e.clientY)
+    img.src = "/images/fb_icon.png"
+    console.log ctx
   $("#clear-button").click ->
     ctx.clearRect(0, 0, canvas.width(), canvas.height())  
 
