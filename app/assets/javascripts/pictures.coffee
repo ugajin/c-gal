@@ -1,51 +1,53 @@
+@images = []
+@clicked = 0
+@image_count = 0
+
 $ ->
+  # 初期設定
   canvas = $('#draw-area')
   ctx = canvas[0].getContext('2d')
-  ctx.lineWidth = 1
 
+  # クリック時処理
   canvas.mousedown (e)->
-    img = new Image()
-    fill_x = $('.fill-x').val()
-    fill_y = $('.fill-y').val()
+    mouseDown(e)
 
-    # ctx.strokeRect(e.clientX, e.clientY, fill_x, fill_y)
-    img.onload = ()->
-      ctx.drawImage(img, e.clientX, e.clientY)
-    img.src = "/images/fb_icon.png"
-    console.log ctx
+  mouseDown = (e) ->
+    # 当たり判定
+    on_image = false
+    
+    if @images
+      for image, i in images
+        if e.offsetX >= images[i].drawOffsetX && e.offsetX <= (images[i].drawOffsetX + images[i].drawWidth) &&
+           e.offsetY >= images[i].drawOffsetY && e.offsetY <= (images[i].drawOffsetY + images[i].drawHeight)
+
+          @clicked = i
+          on_image = true
+
+
+    if on_image
+      console.log "on_image"
+    else
+      img = new Image()
+      img.src = "/images/fb_icon.png"
+      # 今は決め打ち
+      img.drawWidth = 30
+      img.drawHeight = 30
+      img.drawOffsetX = e.offsetX
+      img.drawOffsetY = e.offsetY
+
+      @images[@image_count] = img
+      @image_count++
+
+      img.onload = ()->
+        ctx.drawImage(img, e.offsetX, e.offsetY)
+
+
+  # 消去ボタン
   $("#clear-button").click ->
     ctx.clearRect(0, 0, canvas.width(), canvas.height())  
 
-  ctx.savePrevData = ->
-    @.prevImageData = @.getImageData(0, 0, canvas.width(), canvas.height()) 
-
-  $("#return-button").click ->
-        ctx.putImageData(ctx.prevImageData, 0, 0) 
-
+  # 保存ボタン
   $("#save-button").click ->
     url = canvas[0].toDataURL()
     $.post '/pictures/', {data: url}, (data) ->
-      reloadPictures()  
-  
-
-  reloadPictures = ->
-      $.get '/pictures/', (result)->
-        ids = result.split(',')
-        pictures = $("#pictures")
-        pictures.empty()
-        ids.forEach (id, i)->
-          if parseInt(id) > 0
-            pictures.append("<img src=\"/images/#{id}.png\" class=\"thumbnail\" />")
-        # ここからコピー処理
-        thumb_pics = $("#pictures .thumbnail")
-        thumb_pics.click ->
-          image = new Image()
-          image.src = $(@).attr('src')
-          image.onload = ->
-            ctx.clearRect(0, 0, canvas.width(), canvas.height())
-            ctx.drawImage(image, 0, 0)
-    reloadPictures()
-
-  getPointPosition = (e) ->
-      x: e.clientX
-      y: e.clientY
+      console.log "image saved"
