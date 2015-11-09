@@ -1,3 +1,24 @@
 // Place all the styles related to the pictures controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.container{
+    margin: 60px;
+}
+#draw-area, #control-panel{
+    float: left;
+}
+
+#control-panel{
+    margin-left: 40px;
+    padding: 40px;
+}
+#switcher{
+    margin-top: 40px;
+}
+.dress-btn{
+    width: 140px;
+}
+.src-btn{
+    width: 60px;
+}
