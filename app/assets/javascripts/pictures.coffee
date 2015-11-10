@@ -60,6 +60,10 @@ $ ->
      moveUp()
   $("#move-down").click ->
      moveDown()
+  $("#draw-up").click ->
+    drawUp()
+  $("#draw-down").click ->
+    drawDown()
   $("#delete-clicked").click ->
     deleteClicked()
   #$("#move-rotate").click ->
@@ -88,6 +92,16 @@ $ ->
     images[@clicked_index].drawOffsetY += 10
     redraw()
 
+  drawUp = () ->
+    images[@clicked_index].drawWidth *= 1.1
+    images[@clicked_index].drawHeight *= 1.1
+    redraw()
+
+  drawDown = () ->
+    images[@clicked_index].drawWidth *= 0.9
+    images[@clicked_index].drawHeight *= 0.9
+    redraw()
+
   deleteClicked = () ->
     images.splice @clicked_index, 1
     @clicked_index = 0
@@ -113,7 +127,7 @@ $ ->
     ctx.drawImage(dress_img, 0, 0)
     
     for image, i in images
-      ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY)
+      ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
 
 
   # 消去ボタン
