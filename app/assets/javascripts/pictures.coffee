@@ -29,8 +29,8 @@ $ ->
       img = new Image()
       img.src = @src
       # 今は決め打ち
-      img.drawWidth = 30
-      img.drawHeight = 30
+      img.drawWidth = img.width
+      img.drawHeight = img.height
       img.drawOffsetX = e.offsetX
       img.drawOffsetY = e.offsetY
 
