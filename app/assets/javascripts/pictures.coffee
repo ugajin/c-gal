@@ -28,18 +28,18 @@ $ ->
     if not on_image
       img = new Image()
       img.src = @src
-      # 今は決め打ち
       img.drawWidth = img.width
       img.drawHeight = img.height
-      img.drawOffsetX = e.offsetX
-      img.drawOffsetY = e.offsetY
+      img.drawOffsetX = e.offsetX - img.width / 2
+      img.drawOffsetY = e.offsetY - img.height / 2
+      img.radian = 0
 
       @images[@image_count] = img
       @clicked_index = @image_count
       @image_count++
 
       img.onload = ()->
-        ctx.drawImage(img, e.offsetX, e.offsetY)
+        ctx.drawImage(img, img.drawOffsetX, img.drawOffsetY)
 
   # 各ボタンの処理
   $(".dress-btn").click ->
@@ -66,8 +66,10 @@ $ ->
     drawDown()
   $("#delete-clicked").click ->
     deleteClicked()
-  #$("#move-rotate").click ->
-  #  moveRotate()
+  $("#rotateRight").click ->
+    rotateRight()
+  $("#rotateLeft").click ->
+    rotateLeft()
 
   selectDress = (src) ->
     @dress_src = src
@@ -108,17 +110,13 @@ $ ->
     @image_count--
     redraw()
 
-  moveRotate = () ->
-    ctx.clearRect(0, 0, canvas.width(), canvas.height())
-    for image, i in images
-      if i is @clicked_index
-        ctx.translate(0,0)
-        ctx.rotate(90)
-        ctx.translate(0,0)
-        ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY)
-        ctx.rotate(0)
-      else
-        ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY)
+  rotateRight = () ->
+    images[@clicked_index].radian += 10
+    redraw()
+
+  rotateLeft = () ->
+    images[@clicked_index].radian -= 10
+    redraw()
 
   redraw = () ->
     ctx.clearRect(0, 0, canvas.width(), canvas.height())
@@ -127,7 +125,19 @@ $ ->
     ctx.drawImage(dress_img, 0, 0)
     
     for image, i in images
-      ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
+      if image.radian
+        drawX = image.drawOffsetX + image.drawWidth / 2
+        drawY = image.drawOffsetY + image.drawHeight / 2
+        radian = image.radian * Math.PI / 180
+        ctx.save()
+        ctx.translate(drawX, drawY)
+        ctx.rotate(radian)
+        ctx.translate(-1 * drawX, -1 * drawY)
+        ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
+        ctx.restore()
+      else
+        ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
+
 
 
   # 消去ボタン
