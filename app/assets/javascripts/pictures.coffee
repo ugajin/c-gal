@@ -150,4 +150,4 @@ $ ->
   $("#save-button").click ->
     url = canvas[0].toDataURL()
     $.post '/pictures/', {data: url}, (data) ->
-      console.log "image saved"
+      location.href="/"

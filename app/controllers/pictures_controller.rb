@@ -16,6 +16,5 @@ class PicturesController < ApplicationController
     end
 
     redirect_to :action => "index"
-    render :nothing => true
   end
 end
