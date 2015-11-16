@@ -17,7 +17,7 @@ $ ->
     # 当たり判定
     on_image = false
     if @images
-      for image, i in images
+      for image, i in @images
         if e.offsetX >= images[i].drawOffsetX && e.offsetX <= (images[i].drawOffsetX + images[i].drawWidth) &&
            e.offsetY >= images[i].drawOffsetY && e.offsetY <= (images[i].drawOffsetY + images[i].drawHeight)
 
@@ -70,6 +70,8 @@ $ ->
     rotateRight()
   $("#rotateLeft").click ->
     rotateLeft()
+  $("#clear-button").click ->
+    clearCanvas()
 
   selectDress = (src) ->
     @dress_src = src
@@ -79,29 +81,29 @@ $ ->
     @src = src
 
   moveLeft = () ->
-    images[@clicked_index].drawOffsetX -= 10
+    @images[@clicked_index].drawOffsetX -= 10
     redraw()
 
   moveRight = () ->
-    images[@clicked_index].drawOffsetX += 10
+    @images[@clicked_index].drawOffsetX += 10
     redraw()
 
   moveUp = () ->
-    images[@clicked_index].drawOffsetY -= 10
+    @images[@clicked_index].drawOffsetY -= 10
     redraw()
 
   moveDown = () ->
-    images[@clicked_index].drawOffsetY += 10
+    @images[@clicked_index].drawOffsetY += 10
     redraw()
 
   drawUp = () ->
-    images[@clicked_index].drawWidth *= 1.1
-    images[@clicked_index].drawHeight *= 1.1
+    @images[@clicked_index].drawWidth *= 1.1
+    @images[@clicked_index].drawHeight *= 1.1
     redraw()
 
   drawDown = () ->
-    images[@clicked_index].drawWidth *= 0.9
-    images[@clicked_index].drawHeight *= 0.9
+    @images[@clicked_index].drawWidth *= 0.9
+    @images[@clicked_index].drawHeight *= 0.9
     redraw()
 
   deleteClicked = () ->
@@ -111,20 +113,27 @@ $ ->
     redraw()
 
   rotateRight = () ->
-    images[@clicked_index].radian += 10
+    @images[@clicked_index].radian += 10
     redraw()
 
   rotateLeft = () ->
-    images[@clicked_index].radian -= 10
+    @images[@clicked_index].radian -= 10
     redraw()
+
+  clearCanvas = () ->
+    ctx.clearRect(0, 0, canvas.width(), canvas.height())  
+    @clicked_index = 0
+    @image_count = 0
+    @images = []
+
 
   redraw = () ->
     ctx.clearRect(0, 0, canvas.width(), canvas.height())
     dress_img = new Image()
     dress_img.src = @dress_src
     ctx.drawImage(dress_img, 0, 0)
-    
-    for image, i in images
+
+    for image, i in @images
       if image.radian
         drawX = image.drawOffsetX + image.drawWidth / 2
         drawY = image.drawOffsetY + image.drawHeight / 2
@@ -137,14 +146,6 @@ $ ->
         ctx.restore()
       else
         ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
-
-
-
-  # 消去ボタン
-  $("#clear-button").click ->
-    ctx.clearRect(0, 0, canvas.width(), canvas.height())  
-    @clicked_index = 0
-    @image_count = 0
 
   # 保存ボタン
   $("#save-button").click ->
