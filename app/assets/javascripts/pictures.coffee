@@ -43,11 +43,15 @@ $ ->
 
   # 各ボタンの処理
   $(".dress-btn").click ->
+    $(".dress-btn").removeClass("selected-control")
+    $(this).addClass("selected-control")
     id = $(this).attr("id")
     src = "/dresses/#{id}.png"
     selectDress(src)
 
   $(".src-btn").click ->
+    $(".src-btn").removeClass("selected-control")
+    $(this).addClass("selected-control")
     id = $(this).attr("id")
     src = "/sources/#{id}.png"
     switchSource(src)
