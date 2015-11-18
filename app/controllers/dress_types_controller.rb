@@ -1,2 +1,0 @@
-class DressTypesController < ApplicationController
-end

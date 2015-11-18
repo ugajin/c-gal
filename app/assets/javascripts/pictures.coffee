@@ -7,7 +7,8 @@
 $ ->
   # 初期設定
   canvas = $('#draw-area')
-  ctx = canvas[0].getContext('2d')
+  if canvas[0]
+    ctx = canvas[0].getContext('2d')
 
   # canvasクリック時処理
   canvas.mousedown (e)->

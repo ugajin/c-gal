@@ -1,6 +1,31 @@
 // Place all the styles related to the pictures controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+ul{
+    padding: 0
+}
+
+#left-content{
+    float: left;
+    height: 500px;
+    width: 50%;
+}
+
+#right-content{
+    float: right;
+    text-align: center;
+    height: 500px;
+    width: 50%;
+    padding-top: 153px;
+}
+#right-content img{
+    margin-bottom: 40px;
+}
+
+
+
+
+
 
 .container{
     margin: 60px;
@@ -23,5 +48,6 @@
     width: 60px;
 }
 .selected-control{
-    border: 1px solid #000;
+    border: 1px solid #aaa;
 }
+

@@ -1,3 +1,24 @@
-<% @pictures.each do |picture| %>
-  <%= image_tag(picture.id.to_s+".png") %>
-<% end %>
+<div id="slider-left" class="loopslider">
+  <ul>
+    <% @pictures.each do |picture| %>
+      <li><a href="#"><%= image_tag(picture.id.to_s+".png", {width: 150 }) %></a></li>
+    <% end %>
+  </ul>
+</div>
+<div id="main">
+  <div id="left-content">
+    <img id="title" src="/assets/pic.png" width="600">
+  </div>
+  <div id="right-content">
+    <img id="logo" src="/assets/logo.png" width="400">
+    <%= link_to image_tag("/assets/btn1.png", {:width => 400 }), new_picture_path %>
+  </div>
+</div>
+<div id="slider-right" class="loopslider">
+  <ul>
+    <% @pictures.each do |picture| %>
+        <li><a href="#"><%= image_tag(picture.id.to_s+".png", {width: 150 }) %></a></li>
+    <% end %>
+  </ul>
+</div>
+

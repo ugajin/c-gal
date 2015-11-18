@@ -1,0 +1,39 @@
+.loopslider {
+    margin: 0 auto;
+    width: 100%;
+    height: 150px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+ 
+.loopslider ul {
+    height: 150px;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+ 
+.loopslider ul li {
+    width: 150px;
+    height: 150px;
+    float: left;
+    display: inline;
+    overflow: hidden;
+}
+ 
+/* =======================================
+    ClearFixElements
+======================================= */
+.loopslider ul:after {
+    content: ".";
+    height: 0;
+    clear: both;
+    display: block;
+    visibility: hidden;
+}
+ 
+.loopslider ul {
+    display: inline-block;
+    overflow: hidden;
+}
