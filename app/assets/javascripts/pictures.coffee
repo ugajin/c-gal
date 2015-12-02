@@ -3,7 +3,6 @@
 @image_count = 0
 @src = "/sources/fb_icon.png"
 @dress_src = "/dresses/dress01.png"
-
 $ ->
   # 初期設定
   canvas = $('#draw-area')
@@ -71,9 +70,9 @@ $ ->
     drawDown()
   $("#delete-clicked").click ->
     deleteClicked()
-  $("#rotateRight").click ->
+  $("#rotate-right").click ->
     rotateRight()
-  $("#rotateLeft").click ->
+  $("#rotate-left").click ->
     rotateLeft()
   $("#clear-button").click ->
     clearCanvas()

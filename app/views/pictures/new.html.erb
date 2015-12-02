@@ -1,34 +1,89 @@
-<div class="container center-block">
-  <canvas id="draw-area" class="panel panel-default" width="400" height="400"></canvas>
-  <div id="control-panel" class="panel panel-default">
-    <div id="dresser">
-      <img id="dress01" class="dress-btn" src="/dresses/dress01.png">
-      <img id="dress02" class="dress-btn" src="/dresses/dress02.png">
-      <img id="dress03" class="dress-btn" src="/dresses/dress03.png">
-    </div>
-    <div id="switcher">
-      <img id="flower01" class="src-btn" src="/sources/flower01.png">
-      <img id="flower02" class="src-btn" src="/sources/flower02.png">
-      <img id="flower03" class="src-btn" src="/sources/flower03.png">
-      <img id="fb_icon" class="src-btn" src="/sources/fb_icon.png">
-      <img id="mixi" class="src-btn" src="/sources/mixi.png">
-      <img id="twitter" class="src-btn" src="/sources/twitter.png">
-    </div>
-    <div id="controller">
-      <span id="move-left" class="controll-button btn btn-default">←</span>
-      <span id="move-up" class="controll-button btn btn-default">↑</span>
-      <span id="move-down" class="controll-button btn btn-default">↓</span>
-      <span id="move-right" class="controll-button btn btn-default">→</span>
-      <span id="draw-up" class="controll-button btn btn-default">+</span>
-      <span id="draw-down" class="controll-button btn btn-default">−</span>
-      <span id="delete-clicked" class="controll-button btn btn-default">×</span>
-      <span id="rotateRight" class="controll-button btn btn-default">➡︎</span>
-      <span id="rotateLeft" class="controll-button btn btn-default">⬅︎</span>
-    </div>
-    <div id="button-area">  
-      <span id="clear-button" class="btn btn-default">全消去</span>
-      <span id="save-button" class="controll-button btn btn-default">保存</span>
-    </div>
-  </div>
+<div id="header">
+  <img src="/assets/new/header.png">
 </div>
+<div id="wrap" class="clearfix">
+  <div id="left-content">
+    <div class="center-block clearfix">
+      <canvas id="draw-area" class="panel-blue" width="400" height="400"></canvas>
+      <div id="control-panel">
+        <div id="controller" class="clearfix">
+          <img id="move-left" class="control-button" src="/assets/new/left.png" width="40px">
+          <img id="move-up" class="control-button" src="/assets/new/up.png" width="40px">
+          <img id="move-down" class="control-button" src="/assets/new/down.png" width="40px">
+          <img id="move-right" class="control-button" src="/assets/new/right.png" width="40px">
+          <img id="draw-up" class="control-button" src="/assets/new/drawup.png" width="50px">
+          <img id="draw-down" class="control-button" src="/assets/new/drawdown.png" width="50px">
+          <img id="rotate-right" class="control-button" src="/assets/new/rotateright.png" width="60px">
+          <img id="rotate-left" class="control-button" src="/assets/new/rotateleft.png" width="60px">
+        </div>
+        <div id="button-area">  
+          <img id="clear-button" class="" src="/assets/new/deleteall.png">
+          <img id="delete-clicked" class="" src="/assets/new/delete.png">
+          <img id="save-button" class="" src="/assets/new/finish.png">
+        </div>
+      </div><!-- /#control-panel -->
+    </div><!-- /.container-->
+  </div><!-- /#left-content -->
+  <div id="right-content">
+    <div id="dresser">
+      <h2 class="title">1<span>ドレスを選ぶ</span></h2>
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab1" data-toggle="tab">無地</a></li>
+        <li><a href="#tab2" data-toggle="tab">おまかせ</a></li>
+      </ul>
+      <div id="" class="tab-content panel panel-default">
+        <div class="tab-pane fade in active" id="tab1">
+          <img id="dress01" class="dress-btn" src="/dresses/dress01.png">
+          <img id="dress02" class="dress-btn" src="/dresses/dress02.png">
+        </div>
+        <div class="tab-pane fade in" id="tab2">
+          <img id="dress03" class="dress-btn" src="/dresses/dress03.png">
+        </div>
+      </div><!-- tab-content -->
 
+    </div><!-- /#dresser -->
+    <div id="switcher">
+      <h2 class="title">2<span>素材を選ぶ</span></h2>
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab3" data-toggle="tab">エレガント</a></li>
+        <li><a href="#tab4" data-toggle="tab">ぱきっと</a></li>
+        <li><a href="#tab5" data-toggle="tab">かわいい</a></li>
+        <li><a href="#tab6" data-toggle="tab">ゴージャス</a></li>
+      </ul>
+      <div id="switcher-content" class="panel panel-default">
+        <div id="" class="tab-content">
+          <div class="tab-pane fade in active" id="tab3">
+            <img id="flower01" class="src-btn" src="/sources/flower01.png">
+            <img id="flower02" class="src-btn" src="/sources/flower02.png">
+            <img id="flower03" class="src-btn" src="/sources/flower03.png">
+            <img id="flower03" class="src-btn" src="/sources/flower03.png">
+            <img id="flower03" class="src-btn no-margin" src="/sources/flower03.png">
+            <img id="flower03" class="src-btn" src="/sources/flower03.png">
+            <img id="flower03" class="src-btn" src="/sources/flower03.png">
+            <img id="flower03" class="src-btn" src="/sources/flower03.png">
+            <img id="flower03" class="src-btn" src="/sources/flower03.png">
+          </div>
+          <div class="tab-pane fade in" id="tab4">
+            <img id="fb_icon" class="src-btn" src="/sources/fb_icon.png" width="65px">
+            <img id="mixi" class="src-btn" src="/sources/mixi.png" width="65px">
+            <img id="twitter" class="src-btn" src="/sources/twitter.png" width="65px">
+          </div>
+          <div class="tab-pane fade in" id="tab5">
+            <img id="mixi" class="src-btn" src="/sources/mixi.png">
+          </div>
+          <div class="tab-pane fade in" id="tab6">
+            <img id="fb_icon" class="src-btn" src="/sources/fb_icon.png">
+          </div>
+        </div><!-- tab-content -->
+        <div class="color-switcher">
+          <img id="white-button" class="color-button" src="/assets/new/white.png">
+          <img id="red-button" class="color-button" src="/assets/new/red.png">
+          <img id="blue-button" class="color-button" src="/assets/new/blue.png">
+          <img id="yellow-button" class="color-button" src="/assets/new/yellow.png">
+          <img id="green-button" class="color-button" src="/assets/new/green.png">
+        </div><!-- /.color-switcher -->
+      </div><!-- /#switcher-content -->
+    </div><!-- /#switcher -->
+  </div><!-- /#right-content -->
+</div><!-- /#wrap -->
+  

@@ -4,42 +4,107 @@
 ul{
     padding: 0
 }
+#wrap{
+    margin: 0 auto;
+    width: 960px;
+}
+#header{
+    margin-bottom: 20px;
+}
 
 #left-content{
     float: left;
-    height: 500px;
-    width: 50%;
 }
 
 #right-content{
-    float: right;
-    text-align: center;
-    height: 500px;
-    width: 50%;
-    padding-top: 153px;
+    float: left;
+    margin-left: 60px;
+    width: 475px;
 }
-#right-content img{
+#right-content img#logo{
+    margin-bottom: 60px;
+}
+#right-content ul.nav-tabs li.active a, #right-content ul.nav-tabs li.active a:hover{
+    background-color: #92c5ce;
+    color: #fff;
+}
+#right-content ul.nav-tabs li a{
+    margin: 0;
+    border: 1px solid #ccc;
+    color: #92c5ce;
+}
+#right-content ul.nav-tabs li a:hover{
+    background-color: #fff;
+}
+
+
+h2.title{
+    margin-top: 0;
+}
+h2.title span{
+    padding-left: 10px;
+    font-size: 18px;
+}
+#draw-area{
+    border: 1px solid #92c5ce;
+    margin-bottom: 46px;
+}
+
+#controller{
+    position: relative;
+    height: 120px;
+    width: 400px;
     margin-bottom: 40px;
 }
-
-
-
-
-
-
-.container{
-    margin: 60px;
+.control-button{
+    position: absolute;
 }
-#draw-area, #control-panel{
-    float: left;
+#controller #draw-up{
+    left: 0px;
+    top: 0px;
+}
+#controller #draw-down{
+    left: 0px;
+    bottom: 0px;
+}
+#controller #move-up{
+    left: 160px;
+    top: 0px;
+}
+#controller #move-left{
+    left: 120px;
+    top: 40px;
+}
+#controller #move-right{
+    left: 201px;
+    top: 40px;
+}
+#controller #move-down{
+    left: 160px;
+    top: 80px;
+}
+#controller #rotate-right{
+    top: 0px;
+    right: 0px;
+}
+#controller #rotate-left{
+    top: 54px;
+    right: 52px;
 }
 
-#control-panel{
-    margin-left: 40px;
-    padding: 40px;
-}
 #switcher{
     margin-top: 40px;
+    height: 300px;
+}
+.tab-pane{
+    padding: 25px;
+}
+.tab-pane img{
+    border: 1px solid #fff;
+    margin-right: 25px;
+}
+.tab-pane img.no-margin{
+    margin: 0;
 }
 .dress-btn{
     width: 140px;
@@ -47,7 +112,19 @@ ul{
 .src-btn{
     width: 60px;
 }
-.selected-control{
-    border: 1px solid #aaa;
+.tab-pane img.selected-control{
+    border: 1px solid #92c5ce;
 }
 
+.color-switcher{
+    width: 346px;
+    margin: 0 auto 20px;
+    border-top: 1px solid #ccc;
+}
+.color-switcher img{
+    margin-top: 20px;
+    margin-left: 20px;
+}
+.color-switcher img#white-button{
+    margin-left: 0px;
+}
