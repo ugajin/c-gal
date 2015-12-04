@@ -106,13 +106,13 @@ $ ->
     redraw()
 
   drawDown = () ->
-    @images[@clicked_index].drawWidth *= 0.9
-    @images[@clicked_index].drawHeight *= 0.9
+    @images[@clicked_index].drawWidth /= 1.1
+    @images[@clicked_index].drawHeight /= 1.1
     redraw()
 
   deleteClicked = () ->
     images.splice @clicked_index, 1
-    @clicked_index = 0
+    @clicked_index -= 1
     @image_count--
     redraw()
 
@@ -156,3 +156,10 @@ $ ->
     url = canvas[0].toDataURL()
     $.post '/pictures/', {data: url}, (data) ->
       location.href="/"
+
+  # color-switcher
+  $(".color-button").click ->
+    id = $(this).attr("id")
+    selector = ".parts-#{id}"
+    $(".color-part").css("display", "none")
+    $("#{selector}").css("display", "block")

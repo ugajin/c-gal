@@ -97,14 +97,15 @@ h2.title span{
     height: 300px;
 }
 .tab-pane{
-    padding: 25px;
+    padding: 25px 25px 0 25px;
 }
 .tab-pane img{
     border: 1px solid #fff;
     margin-right: 25px;
+    margin-bottom: 25px;
 }
-.tab-pane img.no-margin{
-    margin: 0;
+.tab-pane img.no-margin-right{
+    margin-right: 0;
 }
 .dress-btn{
     width: 140px;
@@ -113,6 +114,7 @@ h2.title span{
     width: 60px;
 }
 .tab-pane img.selected-control{
+    border-radius: 4px;
     border: 1px solid #92c5ce;
 }
 
@@ -125,6 +127,10 @@ h2.title span{
     margin-top: 20px;
     margin-left: 20px;
 }
-.color-switcher img#white-button{
+.color-switcher img#white{
     margin-left: 0px;
+}
+
+.parts-red, .parts-blue, .parts-yellow, .parts-green{
+    display: none;
 }
