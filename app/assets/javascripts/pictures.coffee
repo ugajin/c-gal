@@ -1,13 +1,15 @@
 @images = []
 @clicked_index = 0
 @image_count = 0
-@src = "/sources/draw/mixi.png"
-@dress_src
+@src_id = "mixi"
+@dress_id
 $ ->
   # 初期設定
   canvas = $('#draw-area')
+  mapping = $('#mapping-area')
   if canvas[0]
     ctx = canvas[0].getContext('2d')
+    map_ctx = mapping[0].getContext('2d')
 
   # canvasクリック時処理
   canvas.mousedown (e)->
@@ -27,7 +29,8 @@ $ ->
 
     if not on_image
       img = new Image()
-      img.src = @src
+      img.src_id = @src_id
+      img.src = "/sources/draw/#{@src_id}.png"
       img.drawWidth = img.width
       img.drawHeight = img.height
       img.drawOffsetX = e.offsetX - img.width / 2
@@ -47,15 +50,13 @@ $ ->
     $(".dress-btn").removeClass("selected-control")
     $(this).addClass("selected-control")
     id = $(this).attr("id")
-    src = "/dresses/draw/#{id}.png"
-    selectDress(src)
+    selectDress(id)
 
   $(".src-btn").click ->
     $(".src-btn").removeClass("selected-control")
     $(this).addClass("selected-control")
     id = $(this).attr("id")
-    src = "/sources/draw/#{id}.png"
-    switchSource(src)
+    switchSource(id)
 
   $("#move-left").click ->
      moveLeft()
@@ -77,16 +78,18 @@ $ ->
     rotateLeft()
   $("#clear-button").click ->
     clearCanvas()
+  $("#save-button").click ->
+    save()
 
-  selectDress = (src) ->
-    @dress_src = src
+  selectDress = (id) ->
+    @dress_id = id
     redraw()
 
-  switchSource = (src) ->
-    @src = src
+  switchSource = (id) ->
+    @src_id = id
     # 初期位置がずれるので一回書いておく
     img = new Image()
-    img.src = @src
+    img.src = "/sources/draw/#{@src_id}.png"
     img.onload = ()->
       ctx.drawImage(img, 0, 0)
       redraw()
@@ -143,10 +146,11 @@ $ ->
   redraw = () ->
     ctx.clearRect(0, 0, canvas.width(), canvas.height())
     dress_img = new Image()
-    dress_img.src = @dress_src
+    dress_img.src = "/dresses/draw/#{@dress_id}.png"
     dress_img.onload = () ->
       ctx.drawImage(dress_img, 0, 0)
       drawSources()
+      fillSelect()
     
   drawSources = () ->
     for image, i in @images
@@ -163,19 +167,15 @@ $ ->
       else
         ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
 
+  fillSelect = () ->
+    for image, i in @images
       if i == @clicked_index
         ctx.beginPath()
         ctx.rect(image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
         ctx.strokeStyle = '#92c5ce'
         ctx.lineWidth = 2
         ctx.stroke()
-
-
-  # 保存ボタン
-  $("#save-button").click ->
-    url = canvas[0].toDataURL()
-    $.post '/pictures/', {data: url}, (data) ->
-      location.href="/"
+        break
 
   # color-switcher
   $(".color-button").click ->
@@ -183,3 +183,62 @@ $ ->
     selector = ".parts-#{id}"
     $(".color-part").css("display", "none")
     $("#{selector}").css("display", "block")
+
+
+  save = () ->
+    ctx.clearRect(0, 0, canvas.width(), canvas.height())
+    dress_img = new Image()
+    dress_img.src = "/dresses/draw/#{@dress_id}.png"
+    dress_img.onload = () ->
+      ctx.drawImage(dress_img, 0, 0)
+      drawSources()
+      generateMappingDress()
+
+  generateMappingDress = () ->
+    # mapping用の画像生成
+    map_dress = new Image()
+    map_dress.src = "/dresses/mapping/#{@dress_id}.png"
+    map_dress.onload = () ->
+      map_ctx.drawImage(map_dress, 0, 0)
+      generateImage()
+
+  generateImage = () ->
+    if @images.length == 0
+      sendImage()
+      return
+
+    image = @images.shift()
+    map_source = new Image()
+    map_source.src = "/sources/mapping/#{image.src_id}.png"
+
+    map_offsetX = image.drawOffsetX * 3
+    map_offsetY = image.drawOffsetY * 3
+    map_drawWidth = image.drawWidth * 3
+    map_drawHeight = image.drawHeight * 3
+
+    map_source.onload = () ->
+      if image.radian
+        drawX = map_offsetX + map_drawWidth / 2
+        drawY = map_offsetY + map_drawHeight / 2
+        radian = image.radian * Math.PI / 180
+        map_ctx.save()
+        map_ctx.translate(drawX, drawY)
+        map_ctx.rotate(radian)
+        map_ctx.translate(-1 * drawX, -1 * drawY)
+        map_ctx.drawImage(map_source, map_offsetX, map_offsetY, map_drawWidth, map_drawHeight)
+        map_ctx.restore()
+      else
+        map_ctx.drawImage(map_source, map_offsetX, map_offsetY, map_drawWidth, map_drawHeight)
+
+    setTimeout ->
+      generateImage()
+    , 1000
+
+  sendImage = () ->
+    url = canvas[0].toDataURL()
+    mapping_url = mapping[0].toDataURL()
+    $.post '/pictures/', {data: url}, (data) ->
+        location.href="/"
+    $.post '/pictures/create_mapping', {data: mapping_url}, (data) ->
+        location.href="/"
+
