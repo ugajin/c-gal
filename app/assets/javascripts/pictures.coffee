@@ -1,8 +1,8 @@
 @images = []
 @clicked_index = 0
 @image_count = 0
-@src = "/sources/fb_icon.png"
-@dress_src = "/dresses/dress01.png"
+@src = "/sources/draw/mixi.png"
+@dress_src
 $ ->
   # 初期設定
   canvas = $('#draw-area')
@@ -17,7 +17,7 @@ $ ->
     # 当たり判定
     on_image = false
     if @images
-      for image, i in @images
+      for image, i in @images by -1
         if e.offsetX >= images[i].drawOffsetX && e.offsetX <= (images[i].drawOffsetX + images[i].drawWidth) &&
            e.offsetY >= images[i].drawOffsetY && e.offsetY <= (images[i].drawOffsetY + images[i].drawHeight)
 
@@ -40,20 +40,21 @@ $ ->
 
       img.onload = ()->
         ctx.drawImage(img, img.drawOffsetX, img.drawOffsetY)
+    redraw()
 
   # 各ボタンの処理
   $(".dress-btn").click ->
     $(".dress-btn").removeClass("selected-control")
     $(this).addClass("selected-control")
     id = $(this).attr("id")
-    src = "/dresses/#{id}.png"
+    src = "/dresses/draw/#{id}.png"
     selectDress(src)
 
   $(".src-btn").click ->
     $(".src-btn").removeClass("selected-control")
     $(this).addClass("selected-control")
     id = $(this).attr("id")
-    src = "/sources/#{id}.png"
+    src = "/sources/draw/#{id}.png"
     switchSource(src)
 
   $("#move-left").click ->
@@ -83,21 +84,27 @@ $ ->
 
   switchSource = (src) ->
     @src = src
+    # 初期位置がずれるので一回書いておく
+    img = new Image()
+    img.src = @src
+    img.onload = ()->
+      ctx.drawImage(img, 0, 0)
+      redraw()
 
   moveLeft = () ->
-    @images[@clicked_index].drawOffsetX -= 10
+    @images[@clicked_index].drawOffsetX -= 5
     redraw()
 
   moveRight = () ->
-    @images[@clicked_index].drawOffsetX += 10
+    @images[@clicked_index].drawOffsetX += 5
     redraw()
 
   moveUp = () ->
-    @images[@clicked_index].drawOffsetY -= 10
+    @images[@clicked_index].drawOffsetY -= 5
     redraw()
 
   moveDown = () ->
-    @images[@clicked_index].drawOffsetY += 10
+    @images[@clicked_index].drawOffsetY += 5
     redraw()
 
   drawUp = () ->
@@ -111,10 +118,11 @@ $ ->
     redraw()
 
   deleteClicked = () ->
-    images.splice @clicked_index, 1
-    @clicked_index -= 1
-    @image_count--
-    redraw()
+    if images.length > 0
+      images.splice @clicked_index, 1
+      @clicked_index -= 1
+      @image_count--
+      redraw()
 
   rotateRight = () ->
     @images[@clicked_index].radian += 10
@@ -125,18 +133,22 @@ $ ->
     redraw()
 
   clearCanvas = () ->
-    ctx.clearRect(0, 0, canvas.width(), canvas.height())  
-    @clicked_index = 0
-    @image_count = 0
-    @images = []
+    if confirm "最初からやり直しますか？"
+      ctx.clearRect(0, 0, canvas.width(), canvas.height())  
+      @clicked_index = 0
+      @image_count = 0
+      @images = []
 
 
   redraw = () ->
     ctx.clearRect(0, 0, canvas.width(), canvas.height())
     dress_img = new Image()
     dress_img.src = @dress_src
-    ctx.drawImage(dress_img, 0, 0)
-
+    dress_img.onload = () ->
+      ctx.drawImage(dress_img, 0, 0)
+      drawSources()
+    
+  drawSources = () ->
     for image, i in @images
       if image.radian
         drawX = image.drawOffsetX + image.drawWidth / 2
@@ -150,6 +162,14 @@ $ ->
         ctx.restore()
       else
         ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
+
+      if i == @clicked_index
+        ctx.beginPath()
+        ctx.rect(image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
+        ctx.strokeStyle = '#92c5ce'
+        ctx.lineWidth = 2
+        ctx.stroke()
+
 
   # 保存ボタン
   $("#save-button").click ->

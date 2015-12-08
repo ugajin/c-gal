@@ -5,12 +5,12 @@
     <% end %>
   </ul>
 </div>
-<div id="main" class="clearfix">
+<div id="top" class="clearfix">
   <div id="left-content">
-    <img id="title" src="/assets/pic.png" width="600">
+    <%= image_tag "/assets/pic.png", id: "title", width: "600" %>
   </div>
   <div id="right-content">
-    <img id="logo" src="/assets/logo.png" width="400">
+    <%= image_tag "/assets/logo.png", id: "logo",  width: "400" %>
     <%= link_to image_tag("/assets/btn1.png", {:width => 400 }), new_picture_path %>
   </div>
 </div>

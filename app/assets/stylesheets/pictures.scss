@@ -15,13 +15,13 @@ ul{
 #left-content{
     float: left;
 }
-
 #right-content{
     float: left;
     margin-left: 60px;
     width: 475px;
 }
 #right-content img#logo{
+    margin-top: 100px;
     margin-bottom: 60px;
 }
 #right-content ul.nav-tabs li.active a, #right-content ul.nav-tabs li.active a:hover{
@@ -37,7 +37,9 @@ ul{
     background-color: #fff;
 }
 
-
+#top #right-content{
+    margin-left: 160px;
+}
 h2.title{
     margin-top: 0;
 }
@@ -58,6 +60,7 @@ h2.title span{
 }
 .control-button{
     position: absolute;
+    cursor: pointer;
 }
 #controller #draw-up{
     left: 0px;
@@ -96,24 +99,27 @@ h2.title span{
     margin-top: 40px;
     height: 300px;
 }
-.tab-pane{
+#dresser .tab-pane{
+    padding: 25px;
+}
+#switcher .tab-pane{
     padding: 25px 25px 0 25px;
 }
-.tab-pane img{
+.tab-pane span{
     border: 1px solid #fff;
     margin-right: 25px;
     margin-bottom: 25px;
 }
-.tab-pane img.no-margin-right{
+.tab-pane .no-margin-right{
     margin-right: 0;
-}
-.dress-btn{
-    width: 140px;
 }
 .src-btn{
     width: 60px;
 }
-.tab-pane img.selected-control{
+.color-part{
+    width: 425px;
+}
+.tab-pane span.selected-control{
     border-radius: 4px;
     border: 1px solid #92c5ce;
 }
@@ -126,6 +132,7 @@ h2.title span{
 .color-switcher img{
     margin-top: 20px;
     margin-left: 20px;
+    cursor: pointer;
 }
 .color-switcher img#white{
     margin-left: 0px;
@@ -133,4 +140,117 @@ h2.title span{
 
 .parts-red, .parts-blue, .parts-yellow, .parts-green{
     display: none;
+}
+
+// sprite設定
+.dress-btn, .src-btn{
+    display: block;
+    width: 65px;
+    height: 65px;
+    background: url(/assets/new/icon-sprite.jpg);
+    background-repeat: no-repeat;
+    cursor: pointer;
+    float: left;
+    margin-right: 25px;
+}
+.row-01{
+    background-position-y: 0;
+}
+.row-02{
+    background-position-y: -65px;
+}
+.row-03{
+    background-position-y: -130px;
+}
+.row-04{
+    background-position-y: -195px;
+}
+.row-05{
+    background-position-y: -260px;
+}
+.row-06{
+    background-position-y: -325px;
+}
+.row-07{
+    background-position-y: -390px;
+}
+.row-08{
+    background-position-y: -455px;
+}
+.row-09{
+    background-position-y: -520px;
+}
+.row-10{
+    background-position-y: -585px;
+}
+.row-11{
+    background-position-y: -650px;
+}
+.row-12{
+    background-position-y: -715px;
+}
+.row-13{
+    background-position-y: -780px;
+}
+.row-14{
+    background-position-y: -845px;
+}
+.row-15{
+    background-position-y: -910px;
+}
+.row-16{
+    background-position-y: -975px;
+}
+.row-17{
+    background-position-y: -1040px;
+}
+.row-18{
+    background-position-y: -1105px;
+}
+.row-19{
+    background-position-y: -1170px;
+}
+.row-20{
+    background-position-y: -1235px;
+}
+.row-21{
+    background-position-y: -1300px;
+}
+.row-22{
+    background-position-y: -1365px;
+}
+.row-23{
+    background-position-y: -1430px;
+}
+
+
+.col-01{
+    background-position-x: 0;
+}
+.col-02{
+    background-position-x: -65px;
+}
+.col-03{
+    background-position-x: -130px;
+}
+.col-04{
+    background-position-x: -195px;
+}
+.col-05{
+    background-position-x: -260px;
+}
+.col-06{
+    background-position-x: -325px;
+}
+.col-07{
+    background-position-x: -390px;
+}
+.col-08{
+    background-position-x: -455px;
+}
+.col-09{
+    background-position-x: -520px;
+}
+.col-10{
+    background-position-x: -585px;
 }
