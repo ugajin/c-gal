@@ -2,14 +2,15 @@ $ ->
   $('#slider-left').each ->
     loopsliderWidth = $(this).width()
     loopsliderHeight = $(this).height()
+    time = 50 * loopsliderWidth
 
     loopsliderLeft = ->
       $('#slider-left-wrap').css left: '0'
-      $('#slider-left-wrap').stop().animate { left: '-' + loopWidth + 'px' }, 25000, 'linear'
+      $('#slider-left-wrap').stop().animate { left: '-' + loopWidth + 'px' }, time, 'linear'
       setTimeout (->
         loopsliderLeft()
         return
-      ), 25000
+      ), time
       return
 
     $(this).children('ul').wrapAll('<div id="slider-left-wrap"></div>')
@@ -33,14 +34,15 @@ $ ->
   $('#slider-right').each ->
     loopsliderWidth = $(this).width()
     loopsliderHeight = $(this).height()
+    time = 50 * loopsliderWidth
 
     loopsliderRight = ->
       $('#slider-right-wrap').css right: '0'
-      $('#slider-right-wrap').stop().animate { right: '-' + loopWidth + 'px' }, 25000, 'linear'
+      $('#slider-right-wrap').stop().animate { right: '-' + loopWidth + 'px' }, time, 'linear'
       setTimeout (->
         loopsliderRight()
         return
-      ), 25000
+      ), time
       return
 
     $(this).children('ul').wrapAll('<div id="slider-right-wrap"></div>')

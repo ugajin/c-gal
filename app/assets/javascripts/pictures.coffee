@@ -3,7 +3,8 @@
 @image_count = 0
 @src_id = "mixi"
 @dress_id
-$ ->
+setTimeout ->
+  $(".loadingWrap").fadeOut()
   # 初期設定
   canvas = $('#draw-area')
   mapping = $('#mapping-area')
@@ -79,6 +80,7 @@ $ ->
   $("#clear-button").click ->
     clearCanvas()
   $("#save-button").click ->
+    $(".loadingWrap").fadeIn()
     save()
 
   selectDress = (id) ->
@@ -123,7 +125,7 @@ $ ->
   deleteClicked = () ->
     if images.length > 0
       images.splice @clicked_index, 1
-      @clicked_index -= 1
+      @clicked_index--
       @image_count--
       redraw()
 
@@ -152,6 +154,7 @@ $ ->
       drawSources()
       fillSelect()
     
+  # パーツ描画
   drawSources = () ->
     for image, i in @images
       if image.radian
@@ -167,6 +170,7 @@ $ ->
       else
         ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
 
+  # 選択状態描画
   fillSelect = () ->
     for image, i in @images
       if i == @clicked_index
@@ -232,7 +236,7 @@ $ ->
 
     setTimeout ->
       generateImage()
-    , 1000
+    , 500
 
   sendImage = () ->
     url = canvas[0].toDataURL()
@@ -241,4 +245,4 @@ $ ->
         location.href="/"
     $.post '/pictures/create_mapping', {data: mapping_url}, (data) ->
         location.href="/"
-
+, 3000
