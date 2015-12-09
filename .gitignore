@@ -12,4 +12,4 @@
 !/log/.keep
 /tmp
 /public/images/*
-/public/mapping/*
+/public/mappings/*
