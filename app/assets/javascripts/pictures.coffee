@@ -3,7 +3,7 @@
 @image_count = 0
 @src_id = "mixi"
 @dress_id
-setTimeout ->
+$ ->
   $(".loadingWrap").fadeOut()
   # 初期設定
   canvas = $('#draw-area')
@@ -245,4 +245,3 @@ setTimeout ->
         location.href="/"
     $.post '/pictures/create_mapping', {data: mapping_url}, (data) ->
         location.href="/"
-, 3000
