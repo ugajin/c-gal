@@ -71,19 +71,19 @@ h2.title span{
     bottom: 0px;
 }
 #controller #move-up{
-    left: 160px;
+    left: 130px;
     top: 0px;
 }
 #controller #move-left{
-    left: 120px;
+    left: 90px;
     top: 40px;
 }
 #controller #move-right{
-    left: 201px;
+    left: 171px;
     top: 40px;
 }
 #controller #move-down{
-    left: 160px;
+    left: 130px;
     top: 80px;
 }
 #controller #rotate-right{
@@ -91,8 +91,19 @@ h2.title span{
     right: 0px;
 }
 #controller #rotate-left{
-    top: 54px;
-    right: 52px;
+    top: 0px;
+    right: 100px;
+}
+#controller #rollback{
+    top: 80px;
+    right: 110px;
+}
+#controller #forward{
+    top: 80px;
+    right: 0px;
+}
+#button-area img{
+    cursor: pointer;
 }
 
 #switcher{
