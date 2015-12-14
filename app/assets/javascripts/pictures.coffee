@@ -23,12 +23,13 @@ $ ->
     on_image = false
     if @images
       for image, i in @images by -1
-        if e.offsetX >= images[i].drawOffsetX && e.offsetX <= (images[i].drawOffsetX + images[i].drawWidth) &&
-           e.offsetY >= images[i].drawOffsetY && e.offsetY <= (images[i].drawOffsetY + images[i].drawHeight)
+        if image.delete is false
+          if e.offsetX >= images[i].drawOffsetX && e.offsetX <= (images[i].drawOffsetX + images[i].drawWidth) &&
+             e.offsetY >= images[i].drawOffsetY && e.offsetY <= (images[i].drawOffsetY + images[i].drawHeight)
 
-          @clicked_index = i
-          on_image = true
-          break
+            @clicked_index = i
+            on_image = true
+            break
 
     if not on_image
       img = new Image()
@@ -39,12 +40,12 @@ $ ->
       img.drawOffsetX = e.offsetX - img.width / 2
       img.drawOffsetY = e.offsetY - img.height / 2
       img.radian = 0
-
-      recordAction("draw", img)
+      img.delete = false
 
       @images[@image_count] = img
       @clicked_index = @image_count
       @image_count++
+      recordAction("draw")
 
       img.onload = ()->
         ctx.drawImage(img, img.drawOffsetX, img.drawOffsetY)
@@ -149,79 +150,127 @@ $ ->
     @images[@clicked_index].radian -= 10
     redraw()
 
-  recordAction = (id, img = null) ->
+  recordAction = (id) ->
     @roll_index++
+    if @roll_index isnt @roll.length
+      @roll = @roll.slice 0, @roll_index
     @roll[@roll_index] = new roll()
     @roll[@roll_index].action = id
     @roll[@roll_index].index = @clicked_index
-    @roll[@roll_index].image = img
 
   # 戻るボタン
   rollback = () ->
     if @roll_index > -1
       switch @roll[@roll_index].action
         when "move-left"
+          @clicked_index = @roll[@roll_index].index
           moveRight(@roll[@roll_index].index)
         when "move-right"
+          @clicked_index = @roll[@roll_index].index
           moveLeft(@roll[@roll_index].index)
         when "move-up"
+          @clicked_index = @roll[@roll_index].index
           moveDown(@roll[@roll_index].index)
         when "move-down"
+          @clicked_index = @roll[@roll_index].index
           moveUp(@roll[@roll_index].index)
         when "draw-up"
+          @clicked_index = @roll[@roll_index].index
           drawDown(@roll[@roll_index].index)
         when "draw-down"
+          @clicked_index = @roll[@roll_index].index
           drawUp(@roll[@roll_index].index)
         when "rotate-left"
+          @clicked_index = @roll[@roll_index].index
           rotateRight(@roll[@roll_index].index)
         when "rotate-right"
+          @clicked_index = @roll[@roll_index].index
           rotateLeft(@roll[@roll_index].index)
         when "draw"
-          target = @image_count
-          target--
-          @images.splice target, 1
-          @clicked_index-- if target is @clicked_index
+          target = @roll[@roll_index].index
+          @images[target].delete = true
+          for image, i in @images by -1
+            if image.delete is false
+              @clicked_index = i
+              break
           @image_count--
           redraw()
-          
+        when "delete"
+          target = @roll[@roll_index].index
+          @clicked_index = target
+          @images[target].delete = false
+          @image_count++
+          redraw()
 
       @roll_index--
 
+  # 進むボタン
   rollForward = () ->
-    if @roll_index
+    limit = @roll.length
+    limit--
+    if @roll_index < limit
+      @roll_index++
       switch @roll[@roll_index].action
         when "move-left"
+          @clicked_index = @roll[@roll_index].index
           moveLeft(@roll[@roll_index].index)
         when "move-right"
+          @clicked_index = @roll[@roll_index].index
           moveRight(@roll[@roll_index].index)
         when "move-up"
+          @clicked_index = @roll[@roll_index].index
           moveUp(@roll[@roll_index].index)
         when "move-down"
+          @clicked_index = @roll[@roll_index].index
           moveDown(@roll[@roll_index].index)
         when "draw-up"
+          @clicked_index = @roll[@roll_index].index
           drawUp(@roll[@roll_index].index)
         when "draw-down"
+          @clicked_index = @roll[@roll_index].index
           drawDown(@roll[@roll_index].index)
         when "rotate-left"
+          @clicked_index = @roll[@roll_index].index
           rotateLeft(@roll[@roll_index].index)
         when "rotate-right"
+          @clicked_index = @roll[@roll_index].index
           rotateRight(@roll[@roll_index].index)
-      @roll_index++
+        when "draw"
+          target = @roll[@roll_index].index
+          @clicked_index = target
+          @images[target].delete = false
+          @image_count++
+          redraw()
+        when "delete"
+          target = @roll[@roll_index].index
+          @images[target].delete = true
+          for image, i in @images by -1
+            if image.delete is false
+              @clicked_index = i
+              break
+          @image_count--
+          redraw()
 
   deleteClicked = () ->
     if @images.length > 0
-      @images.splice @clicked_index, 1
-      @clicked_index--
+      @images[@clicked_index].delete = true
+      recordAction("delete")
+
+      for image, i in @images by -1
+        if image.delete is false
+          @clicked_index = i
+          break
       @image_count--
       redraw()
 
   clearCanvas = () ->
-    if confirm "最初からやり直しますか？"
+    if confirm "最初からやり直しますか？ この操作は取り消せません。"
       ctx.clearRect(0, 0, canvas.width(), canvas.height())  
       @clicked_index = 0
       @image_count = 0
       @images = []
-
+      @roll = []
+      @roll_index = -1
 
   redraw = () ->
     ctx.clearRect(0, 0, canvas.width(), canvas.height())
@@ -235,23 +284,24 @@ $ ->
   # パーツ描画
   drawSources = () ->
     for image, i in @images
-      if image.radian
-        drawX = image.drawOffsetX + image.drawWidth / 2
-        drawY = image.drawOffsetY + image.drawHeight / 2
-        radian = image.radian * Math.PI / 180
-        ctx.save()
-        ctx.translate(drawX, drawY)
-        ctx.rotate(radian)
-        ctx.translate(-1 * drawX, -1 * drawY)
-        ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
-        ctx.restore()
-      else
-        ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
+      if image.delete is false
+        if image.radian
+          drawX = image.drawOffsetX + image.drawWidth / 2
+          drawY = image.drawOffsetY + image.drawHeight / 2
+          radian = image.radian * Math.PI / 180
+          ctx.save()
+          ctx.translate(drawX, drawY)
+          ctx.rotate(radian)
+          ctx.translate(-1 * drawX, -1 * drawY)
+          ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
+          ctx.restore()
+        else
+          ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
 
   # 選択状態描画
   fillSelect = () ->
     for image, i in @images
-      if i == @clicked_index
+      if i is @clicked_index and image.delete is false
         ctx.beginPath()
         ctx.rect(image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
         ctx.strokeStyle = '#92c5ce'
@@ -299,18 +349,19 @@ $ ->
     map_drawHeight = image.drawHeight * 3
 
     map_source.onload = () ->
-      if image.radian
-        drawX = map_offsetX + map_drawWidth / 2
-        drawY = map_offsetY + map_drawHeight / 2
-        radian = image.radian * Math.PI / 180
-        map_ctx.save()
-        map_ctx.translate(drawX, drawY)
-        map_ctx.rotate(radian)
-        map_ctx.translate(-1 * drawX, -1 * drawY)
-        map_ctx.drawImage(map_source, map_offsetX, map_offsetY, map_drawWidth, map_drawHeight)
-        map_ctx.restore()
-      else
-        map_ctx.drawImage(map_source, map_offsetX, map_offsetY, map_drawWidth, map_drawHeight)
+      if image.delete is false
+        if image.radian
+          drawX = map_offsetX + map_drawWidth / 2
+          drawY = map_offsetY + map_drawHeight / 2
+          radian = image.radian * Math.PI / 180
+          map_ctx.save()
+          map_ctx.translate(drawX, drawY)
+          map_ctx.rotate(radian)
+          map_ctx.translate(-1 * drawX, -1 * drawY)
+          map_ctx.drawImage(map_source, map_offsetX, map_offsetY, map_drawWidth, map_drawHeight)
+          map_ctx.restore()
+        else
+          map_ctx.drawImage(map_source, map_offsetX, map_offsetY, map_drawWidth, map_drawHeight)
 
     setTimeout ->
       generateImage()
@@ -327,5 +378,4 @@ $ ->
 
 class roll
   index: 0
-  image: 0
   action: ""
