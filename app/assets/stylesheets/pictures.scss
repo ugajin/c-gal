@@ -58,7 +58,7 @@ h2.title span{
     width: 400px;
     margin-bottom: 40px;
 }
-.control-button{
+.control-button, #rollback, #forward{
     position: absolute;
     cursor: pointer;
 }

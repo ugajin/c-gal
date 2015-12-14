@@ -1,4 +1,6 @@
 @images = []
+@roll = []
+@roll_index = -1
 @clicked_index = 0
 @image_count = 0
 @src_id = "mixi"
@@ -38,6 +40,8 @@ $ ->
       img.drawOffsetY = e.offsetY - img.height / 2
       img.radian = 0
 
+      recordAction("draw", img)
+
       @images[@image_count] = img
       @clicked_index = @image_count
       @image_count++
@@ -60,13 +64,13 @@ $ ->
     switchSource(id)
 
   $("#move-left").click ->
-     moveLeft()
+    moveLeft()
   $("#move-right").click ->
-     moveRight()
+    moveRight()
   $("#move-up").click ->
-     moveUp()
+    moveUp()
   $("#move-down").click ->
-     moveDown()
+    moveDown()
   $("#draw-up").click ->
     drawUp()
   $("#draw-down").click ->
@@ -77,6 +81,13 @@ $ ->
     rotateRight()
   $("#rotate-left").click ->
     rotateLeft()
+  $("#rollback").click ->
+    rollback()
+  $("#forward").click ->
+    rollForward()
+  $(".control-button").click ->
+    id = $(this).attr("id")
+    recordAction(id)
   $("#clear-button").click ->
     clearCanvas()
   $("#save-button").click ->
@@ -96,46 +107,113 @@ $ ->
       ctx.drawImage(img, 0, 0)
       redraw()
 
-  moveLeft = () ->
-    @images[@clicked_index].drawOffsetX -= 5
+  moveLeft = (index = null) ->
+    index = @clicked_index if !index
+    @images[index].drawOffsetX -= 5
     redraw()
 
-  moveRight = () ->
-    @images[@clicked_index].drawOffsetX += 5
+  moveRight = (index = null) ->
+    index = @clicked_index if !index
+    @images[index].drawOffsetX += 5
     redraw()
 
-  moveUp = () ->
-    @images[@clicked_index].drawOffsetY -= 5
+  moveUp = (index = null) ->
+    index = @clicked_index if !index
+    @images[index].drawOffsetY -= 5
     redraw()
 
-  moveDown = () ->
-    @images[@clicked_index].drawOffsetY += 5
+  moveDown = (index = null) ->
+    index = @clicked_index if !index
+    @images[index].drawOffsetY += 5
     redraw()
 
-  drawUp = () ->
-    @images[@clicked_index].drawWidth *= 1.1
-    @images[@clicked_index].drawHeight *= 1.1
+  drawUp = (index = null) ->
+    index = @clicked_index if !index
+    @images[index].drawWidth *= 1.1
+    @images[index].drawHeight *= 1.1
     redraw()
 
-  drawDown = () ->
-    @images[@clicked_index].drawWidth /= 1.1
-    @images[@clicked_index].drawHeight /= 1.1
+  drawDown = (index = null) ->
+    index = @clicked_index if !index
+    @images[index].drawWidth /= 1.1
+    @images[index].drawHeight /= 1.1
     redraw()
 
-  deleteClicked = () ->
-    if images.length > 0
-      images.splice @clicked_index, 1
-      @clicked_index--
-      @image_count--
-      redraw()
-
-  rotateRight = () ->
+  rotateRight = (index = null) ->
+    index = @clicked_index if !index
     @images[@clicked_index].radian += 10
     redraw()
 
-  rotateLeft = () ->
+  rotateLeft = (index = null) ->
+    index = @clicked_index if !index
     @images[@clicked_index].radian -= 10
     redraw()
+
+  recordAction = (id, img = null) ->
+    @roll_index++
+    @roll[@roll_index] = new roll()
+    @roll[@roll_index].action = id
+    @roll[@roll_index].index = @clicked_index
+    @roll[@roll_index].image = img
+
+  # 戻るボタン
+  rollback = () ->
+    if @roll_index > -1
+      switch @roll[@roll_index].action
+        when "move-left"
+          moveRight(@roll[@roll_index].index)
+        when "move-right"
+          moveLeft(@roll[@roll_index].index)
+        when "move-up"
+          moveDown(@roll[@roll_index].index)
+        when "move-down"
+          moveUp(@roll[@roll_index].index)
+        when "draw-up"
+          drawDown(@roll[@roll_index].index)
+        when "draw-down"
+          drawUp(@roll[@roll_index].index)
+        when "rotate-left"
+          rotateRight(@roll[@roll_index].index)
+        when "rotate-right"
+          rotateLeft(@roll[@roll_index].index)
+        when "draw"
+          target = @image_count
+          target--
+          @images.splice target, 1
+          @clicked_index-- if target is @clicked_index
+          @image_count--
+          redraw()
+          
+
+      @roll_index--
+
+  rollForward = () ->
+    if @roll_index
+      switch @roll[@roll_index].action
+        when "move-left"
+          moveLeft(@roll[@roll_index].index)
+        when "move-right"
+          moveRight(@roll[@roll_index].index)
+        when "move-up"
+          moveUp(@roll[@roll_index].index)
+        when "move-down"
+          moveDown(@roll[@roll_index].index)
+        when "draw-up"
+          drawUp(@roll[@roll_index].index)
+        when "draw-down"
+          drawDown(@roll[@roll_index].index)
+        when "rotate-left"
+          rotateLeft(@roll[@roll_index].index)
+        when "rotate-right"
+          rotateRight(@roll[@roll_index].index)
+      @roll_index++
+
+  deleteClicked = () ->
+    if @images.length > 0
+      @images.splice @clicked_index, 1
+      @clicked_index--
+      @image_count--
+      redraw()
 
   clearCanvas = () ->
     if confirm "最初からやり直しますか？"
@@ -153,7 +231,7 @@ $ ->
       ctx.drawImage(dress_img, 0, 0)
       drawSources()
       fillSelect()
-    
+
   # パーツ描画
   drawSources = () ->
     for image, i in @images
@@ -245,3 +323,9 @@ $ ->
         location.href="/"
     $.post '/pictures/create_mapping', {data: mapping_url}, (data) ->
         location.href="/"
+
+
+class roll
+  index: 0
+  image: 0
+  action: ""
