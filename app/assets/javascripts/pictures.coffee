@@ -18,6 +18,56 @@ $ ->
   canvas.mousedown (e)->
     mouseDown(e)
 
+  # 各ボタンの処理
+  $(".dress-btn").click ->
+    $(".dress-btn").removeClass("selected-control")
+    $(this).addClass("selected-control")
+    id = $(this).attr("id")
+    selectDress(id)
+
+  $(".src-btn").click ->
+    $(".src-btn").removeClass("selected-control")
+    $(this).addClass("selected-control")
+    id = $(this).attr("id")
+    switchSource(id)
+
+  $(".color-button").click ->
+    id = $(this).attr("id")
+    selector = ".parts-#{id}"
+    $(".color-part").css("display", "none")
+    $("#{selector}").css("display", "block")
+
+  $("#move-left").click ->
+    moveLeft()
+  $("#move-right").click ->
+    moveRight()
+  $("#move-up").click ->
+    moveUp()
+  $("#move-down").click ->
+    moveDown()
+  $("#draw-up").click ->
+    drawUp()
+  $("#draw-down").click ->
+    drawDown()
+  $("#delete-clicked").click ->
+    deleteClicked()
+  $("#rotate-right").click ->
+    rotateRight()
+  $("#rotate-left").click ->
+    rotateLeft()
+  $("#rollback").click ->
+    rollback()
+  $("#forward").click ->
+    rollForward()
+  $(".control-button").click ->
+    id = $(this).attr("id")
+    recordAction(id)
+  $("#clear-button").click ->
+    clearCanvas()
+  $("#save-button").click ->
+    $(".loadingWrap").fadeIn()
+    save()
+
   mouseDown = (e) ->
     # 当たり判定
     on_image = false
@@ -50,50 +100,6 @@ $ ->
       img.onload = ()->
         ctx.drawImage(img, img.drawOffsetX, img.drawOffsetY)
     redraw()
-
-  # 各ボタンの処理
-  $(".dress-btn").click ->
-    $(".dress-btn").removeClass("selected-control")
-    $(this).addClass("selected-control")
-    id = $(this).attr("id")
-    selectDress(id)
-
-  $(".src-btn").click ->
-    $(".src-btn").removeClass("selected-control")
-    $(this).addClass("selected-control")
-    id = $(this).attr("id")
-    switchSource(id)
-
-  $("#move-left").click ->
-    moveLeft()
-  $("#move-right").click ->
-    moveRight()
-  $("#move-up").click ->
-    moveUp()
-  $("#move-down").click ->
-    moveDown()
-  $("#draw-up").click ->
-    drawUp()
-  $("#draw-down").click ->
-    drawDown()
-  $("#delete-clicked").click ->
-    deleteClicked()
-  $("#rotate-right").click ->
-    rotateRight()
-  $("#rotate-left").click ->
-    rotateLeft()
-  $("#rollback").click ->
-    rollback()
-  $("#forward").click ->
-    rollForward()
-  $(".control-button").click ->
-    id = $(this).attr("id")
-    recordAction(id)
-  $("#clear-button").click ->
-    clearCanvas()
-  $("#save-button").click ->
-    $(".loadingWrap").fadeIn()
-    save()
 
   selectDress = (id) ->
     @dress_id = id
@@ -157,6 +163,64 @@ $ ->
     @roll[@roll_index] = new roll()
     @roll[@roll_index].action = id
     @roll[@roll_index].index = @clicked_index
+
+  deleteClicked = () ->
+    if @images.length > 0
+      @images[@clicked_index].delete = true
+      recordAction("delete")
+
+      for image, i in @images by -1
+        if image.delete is false
+          @clicked_index = i
+          break
+      @image_count--
+      redraw()
+
+  clearCanvas = () ->
+    if confirm "最初からやり直しますか？ この操作は取り消せません。"
+      ctx.clearRect(0, 0, canvas.width(), canvas.height())  
+      @clicked_index = 0
+      @image_count = 0
+      @images = []
+      @roll = []
+      @roll_index = -1
+
+  redraw = () ->
+    ctx.clearRect(0, 0, canvas.width(), canvas.height())
+    dress_img = new Image()
+    dress_img.src = "/dresses/draw/#{@dress_id}.png"
+    dress_img.onload = () ->
+      ctx.drawImage(dress_img, 0, 0)
+      drawSources()
+      fillSelect()
+
+  # パーツ描画
+  drawSources = () ->
+    for image, i in @images
+      if image.delete is false
+        if image.radian
+          drawX = image.drawOffsetX + image.drawWidth / 2
+          drawY = image.drawOffsetY + image.drawHeight / 2
+          radian = image.radian * Math.PI / 180
+          ctx.save()
+          ctx.translate(drawX, drawY)
+          ctx.rotate(radian)
+          ctx.translate(-1 * drawX, -1 * drawY)
+          ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
+          ctx.restore()
+        else
+          ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
+
+  # 選択状態描画
+  fillSelect = () ->
+    for image, i in @images
+      if i is @clicked_index and image.delete is false
+        ctx.beginPath()
+        ctx.rect(image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
+        ctx.strokeStyle = '#92c5ce'
+        ctx.lineWidth = 2
+        ctx.stroke()
+        break
 
   # 戻るボタン
   rollback = () ->
@@ -250,72 +314,6 @@ $ ->
               break
           @image_count--
           redraw()
-
-  deleteClicked = () ->
-    if @images.length > 0
-      @images[@clicked_index].delete = true
-      recordAction("delete")
-
-      for image, i in @images by -1
-        if image.delete is false
-          @clicked_index = i
-          break
-      @image_count--
-      redraw()
-
-  clearCanvas = () ->
-    if confirm "最初からやり直しますか？ この操作は取り消せません。"
-      ctx.clearRect(0, 0, canvas.width(), canvas.height())  
-      @clicked_index = 0
-      @image_count = 0
-      @images = []
-      @roll = []
-      @roll_index = -1
-
-  redraw = () ->
-    ctx.clearRect(0, 0, canvas.width(), canvas.height())
-    dress_img = new Image()
-    dress_img.src = "/dresses/draw/#{@dress_id}.png"
-    dress_img.onload = () ->
-      ctx.drawImage(dress_img, 0, 0)
-      drawSources()
-      fillSelect()
-
-  # パーツ描画
-  drawSources = () ->
-    for image, i in @images
-      if image.delete is false
-        if image.radian
-          drawX = image.drawOffsetX + image.drawWidth / 2
-          drawY = image.drawOffsetY + image.drawHeight / 2
-          radian = image.radian * Math.PI / 180
-          ctx.save()
-          ctx.translate(drawX, drawY)
-          ctx.rotate(radian)
-          ctx.translate(-1 * drawX, -1 * drawY)
-          ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
-          ctx.restore()
-        else
-          ctx.drawImage(image, image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
-
-  # 選択状態描画
-  fillSelect = () ->
-    for image, i in @images
-      if i is @clicked_index and image.delete is false
-        ctx.beginPath()
-        ctx.rect(image.drawOffsetX, image.drawOffsetY, image.drawWidth, image.drawHeight)
-        ctx.strokeStyle = '#92c5ce'
-        ctx.lineWidth = 2
-        ctx.stroke()
-        break
-
-  # color-switcher
-  $(".color-button").click ->
-    id = $(this).attr("id")
-    selector = ".parts-#{id}"
-    $(".color-part").css("display", "none")
-    $("#{selector}").css("display", "block")
-
 
   save = () ->
     ctx.clearRect(0, 0, canvas.width(), canvas.height())
