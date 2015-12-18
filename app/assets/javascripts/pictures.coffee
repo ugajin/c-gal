@@ -3,7 +3,7 @@
 @roll_index = -1
 @clicked_index = 0
 @image_count = 0
-@src_id = "mixi"
+@src_id = ""
 @dress_id
 $ ->
   $(".loadingWrap").fadeOut()
@@ -333,7 +333,7 @@ $ ->
       generateImage()
 
   generateImage = () ->
-    if @images.length == 0
+    if @images.length is 0
       sendImage()
       return
 
