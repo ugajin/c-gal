@@ -19,8 +19,7 @@ class PicturesController < ApplicationController
   end
 
   def create_mapping
-    # path = 'public/mappings'
-    path = '../../Dropbox/mapping_test'
+    path = 'public/mappings'
     @picture = Picture.last
     
     File.open("#{Rails.root}/#{path}/#{@picture.id}.png", "wb") do |f|
