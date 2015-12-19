@@ -97,8 +97,6 @@ $ ->
       @image_count++
       recordAction("draw")
 
-      img.onload = ()->
-        ctx.drawImage(img, img.drawOffsetX, img.drawOffsetY)
     redraw()
 
   selectDress = (id) ->

@@ -4,9 +4,9 @@
 ul{
     padding: 0
 }
-#wrap{
+#new{
     margin: 0 auto;
-    width: 960px;
+    width: 1080px;
 }
 #header{
     margin-bottom: 20px;
@@ -15,9 +15,12 @@ ul{
 #left-content{
     float: left;
 }
+#new #left-content{
+    width: 480px;
+}
 #right-content{
     float: left;
-    margin-left: 60px;
+    margin-left: 80px;
     width: 475px;
 }
 #right-content img#logo{
@@ -49,13 +52,15 @@ h2.title span{
 }
 #draw-area{
     border: 1px solid #92c5ce;
-    margin-bottom: 46px;
+    display: block;
+    margin: 0 auto 38px auto;
+
 }
 
 #controller{
     position: relative;
-    height: 120px;
-    width: 400px;
+    height: 130px;
+    width: 480px;
     margin-bottom: 40px;
 }
 .control-button, #rollback, #forward{
@@ -71,20 +76,20 @@ h2.title span{
     bottom: 0px;
 }
 #controller #move-up{
-    left: 130px;
+    left: 170px;
     top: 0px;
 }
 #controller #move-left{
-    left: 90px;
-    top: 40px;
+    left: 118px;
+    top: 48px;
 }
 #controller #move-right{
-    left: 171px;
-    top: 40px;
+    left: 220px;
+    top: 48px;
 }
 #controller #move-down{
-    left: 130px;
-    top: 80px;
+    left: 170px;
+    top: 100px;
 }
 #controller #rotate-right{
     top: 0px;
@@ -92,18 +97,24 @@ h2.title span{
 }
 #controller #rotate-left{
     top: 0px;
-    right: 100px;
+    right: 120px;
 }
 #controller #rollback{
     top: 80px;
-    right: 110px;
+    right: 124px;
 }
 #controller #forward{
     top: 80px;
-    right: 0px;
+    right: 8px;
 }
 #button-area img{
     cursor: pointer;
+}
+#button-area #save-button{
+    float: right;
+}
+#button-area #delete-clicked{
+    margin-left: 32px;
 }
 
 #switcher{
@@ -275,14 +286,21 @@ html, body{
     width: 100%;
     height: 100%;
     background: #fff;
+    opacity: 0.8;
     position: fixed;
     top: 0;
     left: 0;
 }
-.loadingWrap img{
+.loadingWrap img, .loadingWrap p{
     position: absolute;
     top: 50%;
     left: 50%;
     margin-top: -100px;
     margin-left: -150px;
+}
+.loadingWrap p{
+    color: #999;
+    font-size: 18px;
+    margin-top: 130px;
+    margin-left: -106px;
 }
